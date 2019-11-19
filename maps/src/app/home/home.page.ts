@@ -10,7 +10,7 @@ import { Map, latLng, tileLayer, Layer, marker, Icon } from 'leaflet';
 */
 function habilitarMarkerIcon() {
   delete Icon.Default.prototype._getIconUrl;
-  
+
   Icon.Default.mergeOptions({
     iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
     iconUrl: require('leaflet/dist/images/marker-icon.png'),
@@ -28,7 +28,7 @@ habilitarMarkerIcon()
 export class HomePage {
   map: Map;
 
-  constructor(private geolocation: Geolocation) {}
+  constructor(private geolocation: Geolocation) { }
 
   ionViewDidEnter() { this.leafletMap(); }
 
@@ -36,20 +36,23 @@ export class HomePage {
     // In setView add latLng and zoom
     this.map = new Map('mapId').setView([28.644800, 77.216721], 10);
     tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'edupala.com © ionic LeafLet',
+      attribution: '© ionic LeafLet',
     }).addTo(this.map);
 
     marker([28.6, 77]).addTo(this.map)
       .bindPopup('Ionic 4 <br> Leaflet.')
       .openPopup();
 
-      this.geolocation.getCurrentPosition().then((resp) => {
-        // resp.coords.latitude
-        // resp.coords.longitude
-        this.map.setView([resp.coords.latitude, resp.coords.longitude]);
-       }).catch((error) => {
-         console.log('Error getting location', error);
-       });
+    this.geolocation.getCurrentPosition().then((resp) => {
+      let coords = [resp.coords.latitude, resp.coords.longitude]
+      this.map.setView(coords);
+
+      marker(coords).addTo(this.map)
+        .bindPopup('Você está aqui')
+        .openPopup();
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
   }
 
 }
