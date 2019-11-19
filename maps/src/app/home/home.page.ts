@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+
+
 import { Map, latLng, tileLayer, Layer, marker, Icon } from 'leaflet';
 
 /* Para o ícone do marker carregar nos dispositivos moveis 
@@ -25,6 +28,8 @@ habilitarMarkerIcon()
 export class HomePage {
   map: Map;
 
+  constructor(private geolocation: Geolocation) {}
+
   ionViewDidEnter() { this.leafletMap(); }
 
   leafletMap() {
@@ -37,6 +42,14 @@ export class HomePage {
     marker([28.6, 77]).addTo(this.map)
       .bindPopup('Ionic 4 <br> Leaflet.')
       .openPopup();
+
+      this.geolocation.getCurrentPosition().then((resp) => {
+        // resp.coords.latitude
+        // resp.coords.longitude
+        this.map.setView([resp.coords.latitude, resp.coords.longitude]);
+       }).catch((error) => {
+         console.log('Error getting location', error);
+       });
   }
 
 }
