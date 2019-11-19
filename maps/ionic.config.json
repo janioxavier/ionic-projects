@@ -1,7 +1,8 @@
 {
   "name": "maps",
   "integrations": {
-    "cordova": {}
+    "cordova": {},
+    "capacitor": {}
   },
   "type": "angular"
 }
